@@ -1,0 +1,141 @@
+<header class="bg-info" style="background-color: #6e83d3;">
+    <div class="container-xl px-5">
+        <div class="row align-items-center">
+            <div class="col-md-10">
+                <h1 class="text-white py-3 mb-0 display-6 text-center fw-light">
+                    <i class="material-icons">library_add</i>
+                    Archiver un mémoire</h1>
+            </div>
+            <!-- <div class="col-md-6 d-flex justify-content-end align-items-center">
+                <hr class="my-0 mx-3" style="height: 40px; border-width: 2px;">
+                <button class="btn btn-info text-white" type="button" routerLink="/notes/module">
+                    <i class="material-icons">library_add</i> Ajout multiple ?
+                </button>
+            </div> -->
+        </div>
+    </div>
+</header>
+
+
+
+<div class="row g-0">
+    <div style="margin-left: 15%;" class="col-lg-7 col-md-7">
+        <div class="card-body p-5">
+
+            <!-- Login submission form-->
+            <form class="mb-5" [formGroup]="form" (ngSubmit)="submit()">
+                
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label for="type">Année académique</label>
+                            <select class="form-control" formControlName="annee">
+                                <option value="">Sélectionner </option>
+                                <option *ngFor="let annee of listeAnnees" [value]="annee.numeroDebut">{{
+                                    annee.code}}</option>
+                            </select>
+                            <div *ngIf="form.get('annee')?.invalid && form.get('annee')?.touched">
+                                <small class="text-danger" *ngIf="form.get('annee')?.hasError('required')"> {{
+                                    errorMessages.required }} </small>
+    
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label for="type">Département </label>
+                            <select class="form-control"  name="departement" formControlName="departement">
+                                <option value="">Sélectionner</option>
+                                <option *ngFor="let departement of listeDepartements" [value]="departement.code">{{ departement.code }}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="form.get('departement')?.invalid && form.get('departement')?.touched">
+                            <small class="text-danger" *ngIf="form.get('departement')?.hasError('required')"> {{ errorMessages.required }} </small>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label for="type">Parcours </label>
+                            <select class="form-control" name="parcours" formControlName="parcours">
+                                <option value="">Sélectionner</option>
+                                <option *ngFor="let parcour of listeParcours" [value]="parcour.label">{{
+                                    parcour.label }}</option>
+                            </select>
+                        </div>
+                        <div *ngIf="form.get('parcours')?.invalid && form.get('parcours')?.touched">
+                            <small class="text-danger" *ngIf="form.get('parcours')?.hasError('required')"> {{
+                                errorMessages.required }} </small>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label >Thème</label>
+                            <input type="text" placeholder="votre theme"  class="form-control"  formControlName="theme">
+                            <div *ngIf="form.get('theme')?.invalid && form.get('theme')?.touched">
+                                <small class="text-danger" *ngIf="form.get('theme')?.hasError('required')"> {{
+                                    errorMessages.required }} </small>
+    
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label >Mots-clés</label>
+                            <input type="text"  class="form-control" placeholder="{mot1; mot2; ...}"  formControlName="keyword">
+                            <div *ngIf="form.get('keyword')?.invalid && form.get('keyword')?.touched">
+                                <small class="text-danger" *ngIf="form.get('keyword')?.hasError('required')"> {{
+                                    errorMessages.required }} </small>
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label for="type">Présenté par :</label>
+                            <select  class="form-control" formControlName="etudiant">
+                                <option value="">Sélectionner l'étudiant</option>
+                                <option *ngFor="let item of etudiant" [value]="item.matricule">{{item.matricule + "  "+item.nom}} </option>
+                            </select>
+                        </div>
+                        <div *ngIf="form.get('etudiant')?.invalid && form.get('etudiant')?.touched">
+                            <small class="text-danger" *ngIf="form.get('etudiant')?.hasError('required')"> {{
+                                errorMessages.required }} </small>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label >Sous la supervision de:</label>
+                            <input type="text"  class="form-control" placeholder="President du jury" formControlName="pjury"><br>
+                            <input type="text"  class="form-control" placeholder="Examinateur"   formControlName="examinateur"><br>
+                            <input type="text"  class="form-control" placeholder="Rapporteur"   formControlName="rapporteur">
+                            <div *ngIf="form.get('pjury')?.invalid && form.get('pjury')?.touched">
+                                <small class="text-danger" *ngIf="form.get('pjury')?.hasError('required')"> {{
+                                    errorMessages.required }} </small>
+    
+                            </div>
+                        </div>
+                        
+                    </div>
+
+                    <!-- Fichier numerique du memoire pour zipper -->
+                    <div class="mb-4">
+                        <div class="form-group">
+                            <label>Fichier numérique  </label>
+                            <input type="file" class="form-control" (change)="onSelectFile($event)">
+                        </div>
+                    </div>
+               
+                <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
+                    <button class="btn btn-info text-white" type='submit'>Archiver</button>
+                </div>
+            </form>
+            <!-- Auth card message-->
+
+         </div>
+
+    </div>
+</div>

@@ -1,0 +1,59 @@
+<div class="container-xl p-5">
+    <div class="row justify-content-between align-items-center mb-5">
+        <div class="col flex-shrink-0 mb-5 mb-md-0">
+            <h1 class="display-4 mb-0">Anneée academique</h1>
+            <div class="text-muted">Liste des années academique</div>
+        </div>
+
+    </div>
+
+
+    <div class="card card-raised">
+        <div class="card-header  bg-info  text-white px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="me-4">
+                    <h2 class="card-title text-white mb-0">
+                        <button class="btn btn-md btn-info btn-text-white" type="button"
+                            routerLink="/administrator/anneeacademique/nouveau">Nouvelle</button>
+                    </h2>
+                    <div class="card-subtitle"></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <div class="datatable-container">
+                <!-- <button (click)="captureScreen()" class="btn btn-primary mb-3 " style="margin-left: 1px;">
+                    <i class="material-icons">picture_as_pdf</i> PDF
+                </button> -->
+
+                <div id="contentToConvert" class="container">
+                    <!-- Table header -->
+
+              
+                    <table id="table-data" class="table-striped datatable-table " style="width:100%" datatable>
+                        <thead>
+                            <tr>
+                                <th>N°</th>
+                                <th>Début</th>
+                                <th>Fin</th>
+                                <th>Séssion</th>
+                                <!-- <th>Action(s)</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let a of anneeAcademiques;let i =  index">
+                                <td>{{i + 1}} </td>
+                                <td> {{a.debut}}</td>
+                                <td>{{a.fin}}</td>
+                                <td><b>{{a.code}}</b></td>
+                                <!-- <td class="text-success"></td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

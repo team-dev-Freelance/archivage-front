@@ -1,0 +1,97 @@
+<div class="container-xl p-5">
+    <div class="row justify-content-between align-items-center mb-5">
+        <div class="col flex-shrink-0 mb-5 mb-md-0">
+            <h1 class="display-4 mb-0">Tableau de bord</h1>
+            <div class="text-muted">Bienvenue à l'acceuil</div>
+        </div>
+      
+    </div>
+    <!-- Colored status cards-->
+    <div class="row gx-5">
+        <div class="col-xxl-3 col-md-6 mb-5">
+            <div class="card card-raised bg-primary text-white">
+                <div class="card-body px-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="me-2">
+                            <div class="display-5 text-white" *ngIf="countDepartement">{{countDepartement}}</div>
+                            <div class="card-text">Nombre de Département</div>
+                        </div>
+                        <div class="icon-circle bg-white-50 text-primary">
+                            <i class="material-icons">location_city</i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+       
+        <!-- student -->
+        <div class="col-xxl-3 col-md-6 mb-5">
+            <div class="card card-raised bg-secondary text-white">
+                <div class="card-body px-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="me-2">
+                            <div class="display-5 text-white" *ngIf="countEtudiant">{{countEtudiant}}</div>
+                            <div class="card-text">Nombre d'étudiants inscrits</div>
+                        </div>
+                        <div class="icon-circle bg-white-50 text-secondary"><i class="material-icons">people</i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <!-- Parcours -->
+        <div class="col-xxl-3 col-md-6 mb-5">
+            <div class="card card-raised bg-success text-white">
+                <div class="card-body px-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="me-2">
+                            <div class="display-5 text-white" *ngIf="countParcours">{{countParcours}}</div>
+                            <div class="card-text">Nombre de Parcours</div>
+                        </div>
+                        <div class="icon-circle bg-white-50 text-info"><i class="material-icons">timeline</i>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+        <!-- Annee -->
+        <div class="col-xxl-3 col-md-6 mb-5">
+            <div class="card card-raised bg-info text-white">
+                <div class="card-body px-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="me-2">
+                            <div class="display-5 text-white" *ngIf="countAnnee">{{countAnnee}}</div>
+                            <div class="card-text">Années actives</div>
+                        </div>
+                        <div class="icon-circle bg-white-50 text-info"><i class="material-icons">event</i>
+                        </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+        <div class="col-xxl-3 col-md-6 mb-5">
+            <div class="card card-raised text-success" style="background-color: #9ad0f5;">
+                <div class="card-body px-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <div class="me-2">
+                            <div class="display-5 text-black" >  %</div>
+                            <div class="card-text text-black"><b>Nombre de mémoires archivés  </b> </div>
+                        </div>
+                        <div class="icon-circle bg-white-50 text-info">
+                            <i class="material-icons">celebration</i>
+                        </div>
+                        <div class="icon-circle bg-white-50 text-warning">
+                            <i class="material-icons">star</i>
+                          </div>
+                    </div>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+     
+</div>

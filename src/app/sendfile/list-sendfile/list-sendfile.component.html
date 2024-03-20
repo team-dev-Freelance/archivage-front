@@ -1,0 +1,64 @@
+<div class="container-xl p-5">
+    <div class="row justify-content-between align-items-center mb-5">
+        <div class="col flex-shrink-0 mb-5 mb-md-0">
+            <h1 class="display-4 mb-0">Historique d'envoi des fichiers</h1>
+            <div class="text-muted">Recap. </div>
+        </div>
+
+    </div>
+
+
+    <div class="card card-raised">
+        <div class="card-header bg-info text-white px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="me-4">
+                    <h2 class="card-title text-white mb-0">
+                        <button class="btn btn-md btn-info btn-text-white" type="button" routerLink="sendfile/newsendfile">Nouveau ?</button>
+                        <!-- <button class="btn btn-md btn-success btn-text-white" type="button" routerLink="/administrator/parcours/enregisrement/multiple">Ajout multiple</button> -->
+                    </h2>
+                
+                    <div class="card-subtitle"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card-body p-4">
+            <div class="datatable-container"> 
+              
+
+                <div id="contentToConvert" class="container" >
+             
+
+                <table id="table-data" class="display table table-striped " style="width:100%">
+                    <thead>
+                        <tr>
+                            <th>N°</th>
+                            <th>Objet</th>
+                            <th>Role</th>
+                            <th>Destinataire </th>
+                            <th>Statut </th>
+                            <th>Action(s)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let item of allParcourss; let i =  index">
+                           
+                            <td>{{i + 1}}</td>
+                            <td>{{item.label}}</td>
+                            <td>{{item.niveau.valeur}}</td>
+                            <td>{{item.option.code}}</td>
+                            <td>{{item.option.code}}</td>
+                            <td>Actions</td>
+                            <!-- <td class="text-success">   
+                                <button class="btn btn-danger" (click)="remove(item.id)"> <i class="fa fa-trash"></i></button>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+    
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
