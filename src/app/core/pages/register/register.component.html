@@ -21,20 +21,20 @@
                                         </div>
 
                                         <!-- Login submission form-->
-                                        <form method="post" class="mb-5">
+                                        <form method="post" class="mb-5" [formGroup]="authForm" id="authForm">
 
                                             <div class="mb-4">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Nom & Prenom </label>
-                                                    <input type="text" class="form-control" name="nom"
+                                                    <input type="text" class="form-control" name="nom" formControlName="username" 
                                                         id="exampleInputEmail1" aria-describedby="emailHelp"
-                                                        placeholder="Enter email">
+                                                        placeholder="Enter username">
                                                 </div>
                                             </div>
                                             <div class="mb-4">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Adresse mail</label>
-                                                    <input type="email" class="form-control" name="email"
+                                                    <input type="email" class="form-control" name="email" formControlName="email" 
                                                         id="exampleInputEmail1" aria-describedby="emailHelp"
                                                         placeholder="Enter email">
                                                 </div>
@@ -42,7 +42,7 @@
                                             <div class="mb-4">
                                                 <div class="form-group">
                                                     <label for="exampleInputPassword1">Mot de passe</label>
-                                                    <input type="password" class="form-control"
+                                                    <input type="password" class="form-control" formControlName="password"  
                                                         id="exampleInputPassword1" placeholder="Password">
                                                   
                                                 </div>
@@ -50,15 +50,16 @@
                                             <div class="mb-4">
                                                 <div class="form-group">
                                                     <label for="exampleInputPassword1">Confirmer votre mot de passe</label>
-                                                    <input type="password" class="form-control"
-                                                        id="exampleInputPassword1" placeholder="Password">
+                                                    <input type="password" class="form-control"  formControlName="confirmPassword" 
+                                                        id="exampleInputPassword1" placeholder="confirmPassword">
                                                   
                                                 </div>
                                             </div>
 
                                             
                                             <div>
-                                                <a class="btn btn-success mdc-ripple-upgraded" routerLink="/administrator/dashboard" >S'inscrire</a>
+                                                <button class="btn btn-success mdc-ripple-upgraded" type='submit' (click)="onSubmit()" >S'inscrire</button>
+    
                                             </div>
                                         </form>
                                         <!-- Auth card message-->

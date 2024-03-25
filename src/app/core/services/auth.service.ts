@@ -45,15 +45,15 @@ export class AuthService {
 
           if (!user) {
             this.loading = false;
-            this.router.navigate(['login']);
+            this.router.navigate(['/login']);
           } else {
             console.log(user.role);
             
             // Setting token access and session variables
             localStorage.setItem('accessToken', user.accessToken);
             localStorage.setItem('refreshToken', user.refreshToken);
-            // sessionStorage.setItem('role', user.role);
-            // sessionStorage.setItem('userId', user.id);
+            sessionStorage.setItem('role', user.role);
+            sessionStorage.setItem('userId', user.id);
             return user;
           }
         })

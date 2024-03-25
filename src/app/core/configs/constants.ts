@@ -40,9 +40,9 @@ export const api = {
   home: {},
 
   auth: {
-    login: '/auth/authenticate',
-    logout: '/auth/logout',
-    register: '/auth/register',
+    login: 'auth/authenticate',
+    logout: 'auth/logout',
+    register: 'auth/register',
   },
 
   admin: {

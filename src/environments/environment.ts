@@ -6,7 +6,7 @@ export const environment = {
     production: false,
   
     //=============in development
-    apiUrl: 'http://localhost:8080/',
+    apiUrl: 'http://localhost:8080/api/v1/',
 
     //============in production
     //  apiUrl: 'https://gest-note-ensb-production.up.railway.app/',

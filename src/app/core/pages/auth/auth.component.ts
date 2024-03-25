@@ -1,7 +1,8 @@
 import { Component } from '@angular/core';
-import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { log } from 'console';
 
 @Component({
   selector: 'app-auth',
@@ -24,20 +25,21 @@ export class AuthComponent {
   }
 
   ngOnInit(): void {
-    this.authForm = this.formBuilder.group({
-      email: [
-        null,
+    this.createForm();
+  }
+
+  createForm() {
+    this.authForm = new FormGroup({
+      email: new FormControl(null,
         Validators.compose([
           Validators.required,
           Validators.pattern(
             /^(\d{9}|\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3}))$/
           ),
-        ]),
-      ],
-      password: [null, Validators.required],
+        ]),),
+      password: new FormControl(null, Validators.required),
     });
   }
-
 
 
   get f() {
@@ -75,7 +77,9 @@ export class AuthComponent {
           const role = sessionStorage.getItem('role');
 
           if (role === 'ADMIN') {
-            this.router.navigate(['/admin']);
+            this.router.navigate(['/administrator/dashboard']);
+            console.log('yeah');
+            
           } else if (role === 'MANAGER') {
             this.router.navigate(['/aci']);
           } else {
