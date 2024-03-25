@@ -16,13 +16,21 @@
                                         <div class="text-center">
                                             <img class="mb-3" src="assets/images/logo_univ_bertoua.jpg" alt="..."
                                                 style="height: 48px">
-                                            <h1 class="display-5 mb-0">Authentification</h1>
-                                            <div class="subheading-1 mb-5">Veillez renseigner vos identifiants </div>
+                                            <h1 class="display-5 mb-0">Nouveau compte</h1>
+                                            <div class="subheading-1 mb-5">Renseigner les champs indiqués </div>
                                         </div>
 
                                         <!-- Login submission form-->
                                         <form method="post" class="mb-5">
 
+                                            <div class="mb-4">
+                                                <div class="form-group">
+                                                    <label for="exampleInputEmail1">Nom & Prenom </label>
+                                                    <input type="text" class="form-control" name="nom"
+                                                        id="exampleInputEmail1" aria-describedby="emailHelp"
+                                                        placeholder="Enter email">
+                                                </div>
+                                            </div>
                                             <div class="mb-4">
                                                 <div class="form-group">
                                                     <label for="exampleInputEmail1">Adresse mail</label>
@@ -36,30 +44,30 @@
                                                     <label for="exampleInputPassword1">Mot de passe</label>
                                                     <input type="password" class="form-control"
                                                         id="exampleInputPassword1" placeholder="Password">
-                                                    <small id="emailHelp" class="form-text text-muted">renseigner votre
-                                                        identifiant.</small>
+                                                  
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <div class="form-group">
+                                                    <label for="exampleInputPassword1">Confirmer votre mot de passe</label>
+                                                    <input type="password" class="form-control"
+                                                        id="exampleInputPassword1" placeholder="Password">
+                                                  
                                                 </div>
                                             </div>
 
-                                            <div class="d-flex align-items-center">
-                                                <div class="form-check">
-                                                    <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                                                    <label class="form-check-label" for="exampleCheck1">Se souvenir de
-                                                        moi</label>
-                                                </div>
-                                            </div>
-                                            <div
-                                                class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                                                <a class="small fw-500 text-decoration-none text-success"
-                                                   >Mot de passe oublier?</a>
-                                                <a class="btn btn-success mdc-ripple-upgraded" routerLink="/administrator/dashboard" >Se
-                                                    connecter</a>
+                                            
+                                            <div>
+                                                <a class="btn btn-success mdc-ripple-upgraded" routerLink="/administrator/dashboard" >S'inscrire</a>
                                             </div>
                                         </form>
                                         <!-- Auth card message-->
-                                        <div class="text-center"><a
-                                                class="small fw-500 text-decoration-none text-success"
-                                                routerLink="/register">Nouveau? Creer un compte!</a></div>
+                                        <div class="text-center ">
+                                            <a
+                                                class="small fw-500 text-decoration-none text-success float-end"
+                                                routerLink="/login">Deja un compte? Se connecter!
+                                            </a>
+                                        </div>
                                     </div>
                                 </div>
                                 <!-- Background image column using inline CSS-->
@@ -77,3 +85,4 @@
     </div>
 
 </div>
+

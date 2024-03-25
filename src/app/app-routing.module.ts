@@ -10,7 +10,7 @@ const routes: Routes = [
   },
   {
     path: "login",
-    loadChildren: () => import('./core/core.module').then(m => m.CoreModule)
+    component:AuthComponent
   },
   {
     path: "etudiant",
@@ -24,9 +24,11 @@ const routes: Routes = [
     path: "sendfile",
     loadChildren: () => import('./sendfile/sendfile.module').then(m => m.SendFileModule)
   },
+  // Définir la redirection par défaut vers la page de login
   {
     path: "",
-    component: DashboardComponent
+    redirectTo: "/login",
+    pathMatch: "full"
   },
 
 

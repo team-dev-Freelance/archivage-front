@@ -1,7 +1,5 @@
-<div *ngIf="isAdminPage == true; else loginPage">
-
+<ng-container *ngIf="!isLoginPage && !isRegisterPage && !isRootPage">
   <app-header></app-header>
-
   <div id="layoutDrawer">
       <app-sidebar></app-sidebar>
       <div id="layoutDrawer_content">
@@ -11,7 +9,12 @@
           <app-footer></app-footer>
       </div>
   </div>
-</div>
-<ng-template #loginPage>
+</ng-container>
+
+
+<ng-container *ngIf="isLoginPage || isRegisterPage">
   <router-outlet></router-outlet>
-</ng-template>
+</ng-container>
+<ng-container *ngIf="isRootPage">
+  <app-auth></app-auth>
+</ng-container>

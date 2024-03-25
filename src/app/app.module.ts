@@ -10,6 +10,7 @@ import { DataTablesModule } from 'angular-datatables';
 // Toast notif
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ToastrModule } from 'ngx-toastr';
+import { PagesModule } from './core/pages/pages.module';
 
 @NgModule({
   declarations: [
@@ -24,7 +25,9 @@ import { ToastrModule } from 'ngx-toastr';
     FormsModule,
     DataTablesModule,
     ToastrModule.forRoot(), 
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    PagesModule // Login page
+
    // provideClientHydration(),
    // SharedService
   ],

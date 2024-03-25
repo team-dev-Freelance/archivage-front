@@ -6,6 +6,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { AuthComponent } from './pages/auth/auth.component';
+import { PagesModule } from './pages/pages.module';
 
 
 @NgModule({
@@ -13,11 +14,10 @@ import { AuthComponent } from './pages/auth/auth.component';
     SidebarComponent,
     HeaderComponent,
     FooterComponent,
-    AuthComponent
   ],
   imports: [
     CommonModule,
-    CoreRoutingModule
+    CoreRoutingModule,
   ],
   exports : [
     SidebarComponent,
