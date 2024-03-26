@@ -23,7 +23,7 @@ export class ServicesService {
   ) { }
 
   private getToken() {
-    const accessToken = localStorage.getItem('accessToken');
+    const accessToken = sessionStorage.getItem('accessToken');
     return accessToken ? accessToken : "";
   }
 
@@ -66,7 +66,7 @@ export class ServicesService {
 
   // public  getPVCours(requestHeader: PVCoursRequest): Observable<any> {
   //     const url = `${this.host}findPVCours`;
-  
+
   //     // Les informations sont maintenant ajoutées comme en-têtes HTTP
   //     const httpOptions = {
   //       headers: new HttpHeaders({
@@ -77,18 +77,18 @@ export class ServicesService {
   //         'parcours': requestHeader.parcours.toString(),
   //       }),
   //     };
-  
+
   //     return this.http.get<any[]>(url, httpOptions);
   // }
-  
+
   // end region
 
   public getResource(url: string, id: any): Observable<any> {
-    //const authToken = this.getToken();
+    const authToken = this.getToken();
     const httpOptions: any = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        //   Authorization: authToken,
+        Authorization: 'BEARER ' + authToken,
       }),
       observe: 'response',
       responseType: 'json',
@@ -98,11 +98,13 @@ export class ServicesService {
 
   //-------------------------header httpOptions----------------------
   public saveResource(url: string, data: any): Observable<any> {
-    //  const authToken = this.getToken();
+    const authToken = this.getToken();
+    console.log(authToken);
+    
     const httpOptions: any = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        //  Authorization: authToken,
+        Authorization: 'Bearer ' + authToken,
       }),
       observe: 'response',
       responseType: 'json',
@@ -111,11 +113,11 @@ export class ServicesService {
   }
 
   public getResources(url: string): Observable<any> {
-    //const authToken = this.getToken();
+    const authToken = this.getToken();
     const httpOptions: any = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
-        // Authorization: authToken,
+        Authorization: 'Bearer ' + authToken,
       }),
       observe: 'response',
       responseType: 'json',
@@ -127,11 +129,11 @@ export class ServicesService {
 
 
   public updateResource(url: string, data: any): Observable<any> {
-    //const authToken = this.getToken();
+    const authToken = this.getToken();
     const httpOptions: any = {
       headers: new HttpHeaders({
         Accept: 'application/json',
-        //   Authorization: authToken,
+        Authorization: 'Bearer ' + authToken,
       }),
       observe: 'response',
       responseType: 'json',
@@ -141,11 +143,11 @@ export class ServicesService {
 
 
   public deleteResource(url: string, id: any) {
-    //const authToken = this.getToken();
+    const authToken = this.getToken();
     const httpOptions: any = {
       headers: new HttpHeaders({
         Accept: 'application/json',
-        //  Authorization: authToken,
+        Authorization: 'Bearer ' + authToken,
       }),
     };
 

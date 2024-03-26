@@ -47,12 +47,12 @@ export const api = {
 
   admin: {
     anneeAcademique: {
-      getAll: 'findAllAnneeAcademique ',
-      create: 'addAnneeAcademique',
-      delete: 'deleteAnneeAca/', // + id
-      uptade: 'updateAnneeAca/', // + id
-      getOne: 'findAnneeAcaById/', // +id
-      getOneById: (id: number) => `findAnneeAcaById/${id}`,
+      getAll: 'admin/anneeAcademique/findAllAnneeAcademique ',
+      create: 'admin/anneeAcademique/addAnneeAcademique',
+      delete: 'admin/anneeAcademique/deleteAnneeAca/', // + id
+      uptade: 'admin/anneeAcademique/updateAnneeAca/', // + id
+      getOne: 'admin/anneeAcademique/findAnneeAcaById/', // +id
+      getOneById: (id: number) => `admin/anneeAcademique/findAnneeAcaById/${id}`,
     },
     anonymat: {
       create: 'addAnonymat/variable/',
@@ -61,117 +61,143 @@ export const api = {
       delete: 'deleteAnonymat/'
     },
     cours: {
-      create: 'addCours',
-      getOne: 'findCoursById/ ',
+      create: 'admin/cours/addCours',
+      getOne: 'admin/cours/findCoursById/ ',
       // region abdel
-      getOneByCode: (code: string) => `findCoursByCode?code=${code}`,
-      getAllByDepartCode: (code: string) => `findAllCoursByDepart?code=${code}`,
+      getOneByCode: (code: string) => `admin/cours/findCoursByCode?code=${code}`,
+      getAllByDepartCode: (code: string) => `admin/cours/findAllCoursByDepart?code=${code}`,
       //end region
-      getAll: 'findAllCours',
-      update: 'updateCours/',
-      delete: 'deleteCours/'
+      getAll: 'admin/cours/findAllCours',
+      update: 'admin/cours/updateCours/',
+      delete: 'admin/cours/deleteCours/'
     },
     credit: {
-      create: 'addCredit',
-      getOne: 'findCreditById/',
-      getAll: 'findAllCredit',
-      update: 'updateCredit/',
-      delete: 'deleteCredit/'
+      create: 'admin/credit/addCredit',
+      getOne: 'admin/credit/findCreditById/',
+      getAll: 'admin/credit/findAllCredit',
+      update: 'admin/credit/updateCredit/',
+      delete: 'admin/credit/deleteCredit/'
     },
     cycle: {
-      create: 'addCycle',
-      getOne: 'findCycleById/',
-      getAll: 'findAllCycle',
-      update: 'updateCycle/',
-      delete: 'deleteCycle/'
+      create: 'admin/cycle/addCycle',
+      getOne: 'admin/cycle/findCycleById/',
+      getAll: 'admin/cycle/findAllCycle',
+      update: 'admin/cycle/updateCycle/',
+      delete: 'admin/cycle/deleteCycle/'
     },
     departement: {
-      create: 'addDepartement',
-      getOne: 'findDepartById/',
-      getAll: 'findAllDepartement',
-      update: 'updateDepart/',
-      delete: 'deleteDepart/'
+      create: 'admin/departement/addDepartement',
+      getOne: 'admin/departement/findDepartById/',
+      getAll: 'admin/departement/findAllDepartement',
+      update: 'admin/departement/updateDepart/',
+      delete: 'admin/departement/deleteDepart/'
     },
     enseignant: {
-      create: 'addEnseignant',
-      getOne: 'findEnseignantById/',
-      getAll: 'findAllEnseignant',
-      getAllCoursByEnseignant: 'findTeachByEnseignant/',
-      update: 'updateEnseignant/',
-      delete: 'deleteEnseignant/'
+      create: 'admin/addEnseignant',
+      getOne: 'admin/findEnseignantById/',
+      getAll: 'admin/findAllEnseignant',
+      getAllCoursByEnseignant: 'admin/findTeachByEnseignant/',
+      update: 'admin/updateEnseignant/',
+      delete: 'admin/deleteEnseignant/'
     },
     etudiant: {
-      create: 'addEtudiant',
-      getOne: 'findEtudiantById/',
-      getAll: 'findAllEtudiant',
-      getOneByMatricule: 'findEtudiantByMatricule/', //?matricule=value ,
-      getAllByDepartement: 'findAllEtudiantByDepart', //?code=value ,
-      getAllByCours: 'findAllEtudiantByParcours',
-      getAllByCoursAndAnnee: (annee: number, label: string) => `findAllEtudiantByParcours/annee/${annee}/parcours?label=${label}`,
-      update: 'updateEtudiant/',
-      delete: 'deleteEtudiant /'
+      create: 'admin/etudiant/addEtudiant',
+      getOne: 'admin/etudiant/findEtudiantById/',
+      getAll: 'admin/etudiant/findAllEtudiant',
+      getOneByMatricule: 'admin/etudiant/findEtudiantByMatricule/', //?matricule=value ,
+      getAllByDepartement: 'admin/etudiant/findAllEtudiantByDepart', //?code=value ,
+      getAllByCours: 'admin/etudiant/findAllEtudiantByParcours',
+      getAllByCoursAndAnnee: (annee: number, label: string) => `admin/etudiant/findAllEtudiantByParcours/annee/${annee}/parcours?label=${label}`,
+      update: 'admin/etudiant/updateEtudiant/',
+      delete: 'admin/etudiant/deleteEtudiant /'
     },
     evaluation: {
-      create: 'addEvaluation',
-      getAll: 'findAllEvaluation',
-      getOne: 'findEvaluationById/',
-      getOneByCode: 'findEvaluationByCode/',
-      update: 'updateEvaluation/',
-      delete: 'deleteEvaluation/'
+      create: 'admin/addEvaluation',
+      getAll: 'admin/findAllEvaluation',
+      getOne: 'admin/findEvaluationById/',
+      getOneByCode: 'admin/findEvaluationByCode/',
+      update: 'admin/updateEvaluation/',
+      delete: 'admin/deleteEvaluation/'
+    },
+    fichier: {
+      create: 'user/fichier/add/',//{id},
+      getFileListByUser: 'user/fichier/boite/',//{id}',
+      deleteFile: 'user/fichier/deleteOneFile/', // +id
+      deleteBoite: 'user/fichier//deleteBoiteUser/', // +id
     },
     inscription: {
-      create: 'addInscription',
-      getAll: 'findAllEtudiantInscrit/anneeAca /' + /*{ numeroDebut }*/ '/ parcours', //? label = value ,
-      getOne: 'findInscriptionById/',
-      delete: 'deleteInscription/'
+      create: 'admin/inscription/addInscription',
+      getAll: 'admin/inscription/findAllEtudiantInscrit/anneeAca /' + /*{ numeroDebut }*/ '/ parcours', //? label = value ,
+      getOne: 'admin/inscription/findInscriptionById/',
+      delete: 'admin/inscription/deleteInscription/'
+    },
+    jury:{
+      create: 'admin/jury/add',
+      getAll: 'admin/jury/findAll/',
+      getOne: 'admin/jury/findById/',// id
+      delete: 'admin/jury/delete/',
+      update: 'admin/jury/update/'
+    },
+    memoire:{
+      
+      create: 'admin/memoire/add',
+      getAll: 'admin/memoire/findAll/',
+      getOne: 'admin/memoire/findById/',// id
+      findByKeyworld: 'admin/memoire/findByKeyworld/',
+      findByOption: 'admin/memoire/findByOption/',
+      findByEtudiant: 'admin/memoire/findByEtudiant/',
+      findByParcours: 'admin/memoire/findByParcours/',
+      findByDepartement: 'admin/memoire/findByDepartement/',
+      delete: 'admin/memoire/delete/',
+      update: 'admin/memoire/update/'
     },
     module: {
-      create: 'addModule',
-      getAll: 'findAllModule',
-      getOne: 'findModuleById/',
-      getAllModsByCours: (code: string) => `findModuleByCode?code=${code}`,
-      getAllByCours: 'findModuleByCode/',//?code=value ,
-      update: 'updateModule/',
-      delete: 'deleteModule/'
+      create: 'admin/addModule',
+      getAll: 'admin/findAllModule',
+      getOne: 'admin/findModuleById/',
+      getAllModsByCours: (code: string) => `admin/findModuleByCode?code=${code}`,
+      getAllByCours: 'admin/findModuleByCode/',//?code=value ,
+      update: 'admin/updateModule/',
+      delete: 'admin/deleteModule/'
     },
     niveau: {
-      create: 'addNiveau',
-      getAll: 'findAllNiveau',
-      getOne: 'findNiveauById/',
-      update: 'updateNiveau/',
-      delete: 'deleteNiveau/'
+      create: 'admin/niveau/addNiveau',
+      getAll: 'admin/niveau/findAllNiveau',
+      getOne: 'admin/niveau/findNiveauById/',
+      update: 'admin/niveau/updateNiveau/',
+      delete: 'admin/niveau/deleteNiveau/'
     },
     option: {
-      create: 'addOption',
-      getAll: 'findAllOptions',
-      getOne: 'findOptionById/',
-      getAllDept: 'findAllOptionByDepart/', //?code=value ,
-      update: 'updateOption/',
-      delete: 'deleteOption/'
+      create: 'admin/option/addOption',
+      getAll: 'admin/option/findAllOptions',
+      getOne: 'admin/option/findOptionById/',
+      getAllDept: 'admin/option/findAllOptionByDepart/', //?code=value ,
+      update: 'admin/option/updateOption/',
+      delete: 'admin/option/deleteOption/'
     },
     parcours: {
-      create: 'addParcours',
-      getAll: 'findAllParcours',
-      getOne: 'findParcoursById/',
+      create: 'admin/parcours/addParcours',
+      getAll: 'admin/parcours/findAllParcours',
+      getOne: 'admin/parcours/findParcoursById/',
       // region abdel
-      getAllByDept: (code: string) => `findParcoursByDepart?code=${code}`,
-      getAllByNivAndOpt: (niveau: number, code: string) => `findParcoursByNiveauAndOption/niveau/${niveau}/option?code=${code}`,
+      getAllByDept: (code: string) => `admin/parcours/findParcoursByDepart?code=${code}`,
+      getAllByNivAndOpt: (niveau: number, code: string) => `admin/parcours/findParcoursByNiveauAndOption/niveau/${niveau}/option?code=${code}`,
       // end region
-      delete: 'deleteParcours/'
+      delete: 'admin/parcours/deleteParcours/'
     },
     semestre: {
-      create: 'addSemestre',
-      getAll: 'findAllSemestre',
-      getOne: 'findSemestreById/',
-      delete: 'deleteSemestre/',
-      update: 'updateSemestre/'
+      create: 'admin/semestre/addSemestre',
+      getAll: 'admin/semestre/findAllSemestre',
+      getOne: 'admin/semestre/findSemestreById/',
+      delete: 'admin/semestre/deleteSemestre/',
+      update: 'admin/semestre/updateSemestre/'
     },
     typeCours: {
-      create: 'addTypeCours',
-      getAll: 'findAllTypeCours',
-      getOne: 'findTypeCoursById/',
-      update: 'updateTypeCours/',
-      delete: 'deleteTypeCours/'
+      create: 'admin/addTypeCours',
+      getAll: 'admin/findAllTypeCours',
+      getOne: 'admin/findTypeCoursById/',
+      update: 'admin/updateTypeCours/',
+      delete: 'admin/deleteTypeCours/'
     },
     notes: {
       // region pv
@@ -192,17 +218,17 @@ export const api = {
     
     },
     statistique: {
-      getGlobalStat:'findGloalStat',
-      countAllYears: 'findAllActifAnneeAca',
-      countAllDept: 'findAllActifDepartement',
-      countAllStudent: 'findAllActifEtudiant',
-      countAllStudentByDept: 'findAllActifEtudiantDepartement',
-      countAllStudentByCours: 'findAllActifEtudiantParcours',
-      countAllUE: 'findAllActifCours',
-      countAllUEByDept: 'findAllActifCoursDepartement',
-      countAllParcours: 'findAllActifParcours',
-      countAllCoursByDept: 'findAllActifParcoursDepartement',
-      countTauxReuste: 'findPassedStats', //taux de reussite global by departmt
+      getGlobalStat:'admin/findGloalStat',
+      countAllYears: 'admin/findAllActifAnneeAca',
+      countAllDept: 'admin/findAllActifDepartement',
+      countAllStudent: 'admin/findAllActifEtudiant',
+      countAllStudentByDept: 'admin/findAllActifEtudiantDepartement',
+      countAllStudentByCours: 'admin/findAllActifEtudiantParcours',
+      countAllUE: 'admin/findAllActifCours',
+      countAllUEByDept: 'admin/findAllActifCoursDepartement',
+      countAllParcours: 'admin/findAllActifParcours',
+      countAllCoursByDept: 'admin/findAllActifParcoursDepartement',
+      countTauxReuste: 'admin/findPassedStats', //taux de reussite global by departmt
   
     }
   

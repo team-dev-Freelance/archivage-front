@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, map, of } from 'rxjs';
 import { api as apiConfig } from '../configs/constants';
 import { ServicesService } from './services.service';
+import { NotificationService } from './notification.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +13,7 @@ export class AuthService {
   public host = `${apiConfig.baseUrl}`;
   loading = false;
 
-  constructor(private http: HttpClient, private router: Router,private adminService: ServicesService){}
+  constructor(private http: HttpClient, private router: Router,private adminService: ServicesService, private notification: NotificationService){}
   
 
  
@@ -47,11 +48,11 @@ export class AuthService {
             this.loading = false;
             this.router.navigate(['/login']);
           } else {
-            console.log(user.role);
+            console.log(user);
             
             // Setting token access and session variables
-            localStorage.setItem('accessToken', user.accessToken);
-            localStorage.setItem('refreshToken', user.refreshToken);
+            sessionStorage.setItem('accessToken', user.access_token);
+            sessionStorage.setItem('refreshToken', user.refresh_token);
             sessionStorage.setItem('role', user.role);
             sessionStorage.setItem('userId', user.id);
             return user;
@@ -61,24 +62,22 @@ export class AuthService {
   }
 
 
-  logout(userId: any) {
+  logout() {
+
+    const authToken = sessionStorage.getItem('accessToken');
+    const httpOptions: any = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + authToken,
+      }),
+      observe: 'response',
+      responseType: 'json',
+    };
+
     const url = `${apiConfig.auth.logout}`;
 
-    this.adminService.getResource(url, userId).subscribe((data: any) => {
-      let res: any = data;
-      if (res.status == 200) {
-        // remove user from local storage to log user out
-        // localStorage.removeItem('currentUser');
-        localStorage.removeItem('accessToken');
-        localStorage.removeItem('refreshToken');
-        localStorage.clear();
-        sessionStorage.clear();
-        this.router.navigate(['/login']);
-      } else {
-        // this.notify.error('Server Error!', 'Une erreur interne est suvenue au niveau du serveur. Veuillez recommencer !');
-      }
-    });
-    return of({ success: false });
+    return this.http
+      .post<any>(this.host + url,{}, httpOptions)
   }
 
 }
