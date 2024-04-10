@@ -55,6 +55,7 @@ export class AuthService {
             sessionStorage.setItem('refreshToken', user.refresh_token);
             sessionStorage.setItem('role', user.role);
             sessionStorage.setItem('userId', user.id);
+            
             return user;
           }
         })

@@ -1,0 +1,64 @@
+<div class="container-xl p-5">
+    <div class="row justify-content-between align-items-center mb-5">
+        <div class="col flex-shrink-0 mb-5 mb-md-0">
+            <h1 class="display-4 mb-0">Jurys</h1>
+            <div class="text-muted">Liste des jurys</div>
+        </div>
+
+    </div>
+
+
+    <div class="card card-raised">
+        <div class="card-header  bg-info  text-white px-4">
+            <div class="d-flex justify-content-between align-items-center">
+                <div class="me-4">
+                    <h2 class="card-title text-white mb-0">
+                        <button class="btn btn-md btn-info btn-text-white" type="button"
+                            routerLink="/administrator/jury/nouveau">Nouveau</button>
+                    </h2>
+                    <div class="card-subtitle"></div>
+                </div>
+
+            </div>
+        </div>
+        <div class="card-body p-4">
+            <div class="datatable-container">
+        
+
+                <div id="contentToConvert" class="container">
+                    <!-- Table header -->
+
+              
+                    <table id="table-data" class="table-striped datatable-table " style="width:100%" datatable>
+                        <thead>
+                            <tr>
+                                <th>N°</th>
+                                <th>Noms</th>
+                                <th>Statut</th>
+                                <th>Grade</th>
+                                <th>Etat</th>
+                                <th>Action(s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let j of Jurys;let i =  index">
+                                <td>{{i + 1}} </td>
+                                <td> {{j.name}}</td>
+                                <td>{{j.statut}}</td>
+                                <td><b>{{j.grade}}.</b></td>
+                                <td>{{j.active}}</td>
+                                <td class="text-success">
+                                    <button class="btn btn-primary" (click)="update(j)"> <i
+                                            class="fa fa-pencil"></i></button> &nbsp;
+                                    <button class="btn btn-danger" (click)="remove(j.id)"> <i
+                                            class="fa fa-trash"></i></button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>

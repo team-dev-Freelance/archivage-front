@@ -15,7 +15,7 @@
                 <div class="me-4">
                     <h2 class="card-title text-white mb-0">
                         <button class="btn text-white" type="button">
-                            <i class="material-icons">group</i> De quel parcours s'agit-il ?
+                            <i class="material-icons">group</i> Filtrer votre recherche pour un parcours precis.
                         </button>
                     </h2>
                     <div class="card-subtitle"></div>
@@ -35,7 +35,7 @@
                                     <label for="type">Année académique</label>
                                     <select class="form-control" formControlName="annee">
                                         <option value="">Sélectionner </option>
-                                        <option *ngFor="let annee of listeAnnees" [value]="annee.numeroDebut">{{
+                                        <option *ngFor="let annee of listeAnnees" [value]="annee.code">{{
                                             annee.code}}</option>
                                     </select>
                                     <div *ngIf="form.get('annee')?.invalid && form.get('annee')?.touched">
@@ -91,7 +91,7 @@
 
 
     <div class="card card-raised">
-        <div class="card-header bg-primary text-white px-4">
+        <div class="card-header bg-info text-white px-4">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="me-4">
                     <div class="card-subtitle"></div>
@@ -110,16 +110,10 @@
                        
                         <tbody>
                             <tr class="align-middle">
-                                <td colspan="3" class="text-info text-center align-middle"><b> LISTE DES MEMOIRE DE L&#39;ANNEE 
+                                <td colspan="3" class="text-info text-center align-middle"><b> LISTE DES MEMOIRES 
                                 </b></td>
                             </tr>
-                            <tr  class="align-middle">
-                                <td colspan="2" class="text-center align-middle" ><b  style="margin-left: 50%;" *ngIf="listeEtudiantOfParcours">Departement :  </b></td>
-                            </tr>
                            
-                            <tr class="align-middle">
-                                <td colspan="3" class="text-info text-center align-middle"><b *ngIf="listeEtudiantOfParcours">Parcours : {{singleParcours}} </b></td>
-                            </tr>
                         </tbody>
                     </table>
                     <!--  Table of Student -->
@@ -128,27 +122,43 @@
                         <thead>
                             <tr>
                                 <th><b>N°</b></th>
-                                <th><b>Matricule</b></th>
-                                <th><b>Noms & Prenoms</b></th>
-                             
-                                <th><b>Memoire </b></th>
-                                <th><b>Actions</b></th>
+                                <th><b>Theme</b></th>
+                                <th><b>Mots-clés </b></th>
+
+                                <th><b>Etudiant</b></th>
+                                <th ><b>President</b></th>
+                                <th ><b>Examinateur</b></th>
+                                <th ><b>Rapporteur</b></th>
+                                
+                                <th><b>Memoire</b></th>
                             </tr>
                         </thead>
-                        <tbody  *ngIf="listeEtudiantOfParcours">
-                            <ng-container *ngFor="let note of listeEtudiantOfParcours; let i = index">
+                        <tbody  *ngIf="listeMemoires">
+                            <ng-container *ngFor="let memoire of listeMemoires; let i = index">
                                 <tr>  
                                   <td>{{ i + 1 }}</td>
-                                  <td>{{ note.matricule }}</td>
-                                  <td>{{ note.nom}}</td>
-                                  <!-- <td>{{ singleParcours}}</td>
-                                  <td>{{ singleCours}}</td>
-                                  <td>{{ singleEva}}</td> -->
-                                  <td>{{ note.valeur }}</td>
-                                  <td>{{ note.valeur }}</td>
-                                  <td class="text-success">
-                                     <button class="btn btn-primary" (click)="update(note)"> <i  class="fa fa-pencil"></i></button> &nbsp;
-                                   </td>
+                                  <td>{{ memoire.theme }}</td>
+                                  <td>{{ memoire.keyworlds }}</td>
+
+                                  <td>{{ memoire.etudiant.nom}}</td>
+                                
+                                    <td  *ngIf="memoire.jury">
+                                        {{ memoire.jury[0].name}} 
+                                    </td>
+                                    <td  *ngIf="memoire.jury">
+                                        {{ memoire.jury[1].name}} 
+                                    </td>
+                                    <td *ngIf="memoire.jury">
+                                        {{ memoire.jury[2].name}} 
+                                    </td>
+    
+                                    <td class="text-success">
+                                        <a [href]="memoire.urlFile" >
+                                            <button class="btn btn-success"> 
+                                                <i class="fa fa-download"></i>
+                                            </button> 
+                                        </a>
+                                    </td>
                                 </tr>
                               </ng-container>
                         </tbody>

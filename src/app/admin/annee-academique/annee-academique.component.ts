@@ -40,6 +40,7 @@ export class AnneeAcademiqueComponent implements OnInit {
   
   getAllAnneeAca() {
     this.anneeAcademiques = [];
+  
     const url = `${apiConfig.admin.anneeAcademique.getAll}`;
     this.AdminService.getResources(url).subscribe(
       (data) => {

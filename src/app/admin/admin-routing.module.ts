@@ -27,7 +27,10 @@ import { DepartementComponent } from './departement/departement.component';
 import { FiliereFormComponent } from './filiere-form/filiere-form.component';
 import { FiliereComponent } from './filiere/filiere.component';
 
-import { NotesListeComponent } from './notes-liste/notes-liste.component';
+
+import { JuryFormComponent } from './jury-form/jury-form.component';
+import { JuryComponent } from './jury/jury.component';
+
 
 const routes: Routes = [
   {
@@ -86,10 +89,7 @@ const routes: Routes = [
         path: "nouveau",
         component: FiliereFormComponent
       },
-      {
-        path: "enregisrement/multiple",
-        component: FiliereFormMultipleComponent
-      },
+     
       {
         path: "update/:slug", //update
         component: FiliereFormComponent
@@ -107,10 +107,7 @@ const routes: Routes = [
         path: "nouveau",
         component: CycleFormComponent
       },
-      {
-        path: "enregisrement/multiple",
-        component: CycleFormMultipleComponent
-      },
+      
       {
         path: "update/:slug", //update
         component: CycleFormComponent
@@ -130,10 +127,7 @@ const routes: Routes = [
         component: NiveauFormComponent
       }
       ,
-      {
-        path: "enregisrement/multiple",
-        component: NiveauFormMultipleComponent
-      },
+     
       {
         path: "update/:slug", //update
         component: NiveauFormComponent
@@ -151,10 +145,7 @@ const routes: Routes = [
         path: "nouveau",
         component: ParcoursFormComponent
       },
-      {
-        path: "enregisrement/multiple",
-        component: ParcoursFormMultipleComponent
-      },
+     
       {
         path: "update/:slug", //update
         component: ParcoursFormComponent
@@ -177,16 +168,27 @@ const routes: Routes = [
     ]
   },
  
+  
+  // juristes
   {
-    path: "notes",
+    path: "jury",
     children: [
       {
-        path: "listenotesec",
-        component: NotesListeComponent
+        path: "",
+        component: JuryComponent
       },
-      
+      {
+        path: "nouveau",
+        component: JuryFormComponent
+      },
+     
+      {
+        path: "update/:slug", //update
+        component: JuryFormComponent
+      },
     ]
   }
+
 ]
 
 @NgModule({

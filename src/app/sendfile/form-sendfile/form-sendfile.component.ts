@@ -5,6 +5,7 @@ import { api as apiConfig } from '../../core/configs/constants';
 import { ServicesService } from '../../core/services/services.service';
 import { Departement } from '../../core/models/departement';
 import { NotificationService } from '../../core/services/notification.service';
+import { log } from 'console';
 
 @Component({
   selector: 'app-form-sendfile',
@@ -18,93 +19,91 @@ export class FormSendfileComponent implements OnInit {
     minlength: 'Ce champ doit contenir au moins {{ requiredLength }} caractères.',
   };
 
+  selectedFile?: File;
+  users!: any[]
   form!: FormGroup
-  allDepartements!: Departement[];
+  id: any;
+  userMail = localStorage.getItem('email');
+  formData!: FormData;
 
-
-  title = "Envoi de fichier"
-  btnTitle = "Envoyer"
-  name!: string
-
-  userId: any;
-
-  constructor(private notification:NotificationService, private fb: FormBuilder, private AdminService: ServicesService, private router: Router, private route: ActivatedRoute) { }
+  
+  constructor(private notification:NotificationService,  private AdminService: ServicesService, private router: Router, private route: ActivatedRoute) { }
   ngOnInit(): void {
 
-    this.onForm();
-    this.name = this.route.snapshot.params['slug'];
-    if (this.name) {
-      this.title = "Mise à  jour departement"
-      this.btnTitle = "Mise à jour"
-      var str = decodeURIComponent(this.name).split('%');
-      this.form.setValue(
-        {
-          descriptionFr: str[3],
-          code: str[1],
-          descriptionEn: str[2]
-        }
-      )
-    }
+    this.onForm()
+    this.allUsers()
  
   }
 
   onForm() {
     this.form = new FormGroup({
-      code: new FormControl('', [Validators.required]),
-      descriptionFr: new FormControl('', [Validators.required],),
-      descriptionEn: new FormControl('', [Validators.required]),
-
+      nom: new FormControl('', [Validators.required]),
+      emailExpediteur: new FormControl('', [Validators.required]),
     })
+    this.formData = new FormData()
   }
-  submit() {
-    if (this.form.valid) {
-      // operation d'insertion
-      if (this.name == null) {
-        var departement: Departement = {
-          code: this.form.value.code,
-          englishDescription: this.form.value.descriptionEn,
-          frenchDescription: this.form.value.descriptionFr,
-        }
-        const url = `${apiConfig.admin.departement.create}`;
-        this.AdminService.saveResource(url, departement).subscribe(
-          {
-            next: res => {
-              this.notification.record()
-              this.form.reset();
 
-            },
-            error: err => {
+  allUsers() {
+    const url = `${apiConfig.admin.user.getAll}`;
+    this.AdminService.getResources(url).subscribe({
+      next: res => {
+        this.users = res.body;
+        console.log(this.users);
+        
+      },
+    });
+  }
 
-              this.notification.error()
+  onFileSelected(event: any) {
+    const file: File = event.target.files[0];
+    console.log("selectedFile =", file);
+    
+    this.formData.append('file', file);
 
-            }
-          }
-        );
-      }
-      // operation de mise ajour
-      else {
-        var str = decodeURIComponent(this.name).split('%');
-        var departement: Departement = {
-          code: this.form.value.code,
-          englishDescription: this.form.value.descriptionEn,
-          frenchDescription: this.form.value.descriptionFr,
-          id: parseInt(str[0])
-        }
-        const url = `${apiConfig.admin.departement.update}`;
-        this.AdminService.updateResource(url + departement.id, departement).subscribe(
-          {
-            next: res => {
-              this.notification.update()
-  
-              this.router.navigate(['administrator/departement']);
-            },
-            error: err => {
-              this.notification.error()
+  }
+
+
+  submit() 
+  {
+
+    const userId:any = sessionStorage.getItem('userId');
+    console.log(userId);
+    
+    const authToken = sessionStorage.getItem('accessToken');
  
-            }
-          }
-        );
-      }
+
+    this.formData.append('nom', this.form.value.nom);
+    this.formData.append('emailExpediteur', this.form.value.emailExpediteur);
+    this.formData.append('userId', userId);
+   
+    this.formData.forEach((value, key) => {
+      console.log(key + ': ' + value);
+    });
+
+    console.log(authToken);
+   
+   
+    const url = `${apiConfig.admin.fichier.create}`;
+    console.log(url);
+  
+    this.AdminService.saveResourceFile(url, this.formData).subscribe(
+    (response) => {
+      // console.log('Fichier téléchargé avec succès', response);
+      this.notification.record()
+      this.form.reset
+    },
+    (error) => {
+      console.error('Erreur lors du téléchargement du fichier', error);
+      this.notification.error()
+      //  alert("Error")
     }
+  )
+
   }
+
+
+  findUserIdById(id: number) {
+    return this.users.find(item => id === item.id)!
+  }
+
 }

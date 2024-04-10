@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, FormControl, Validators } from '@angular/forms'
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { api as apiConfig } from '../../configs/constants';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-register',
@@ -21,6 +22,7 @@ export class RegisterComponent {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private authService: AuthService,
+    private notification:NotificationService,
   ) {
   }
 
@@ -38,7 +40,7 @@ export class RegisterComponent {
           ),
         ]),),
       password: new FormControl(null, Validators.required),
-      confirmPassword: new FormControl(null, Validators.required),
+      // confirmPassword: new FormControl(null, Validators.required),
       username: new FormControl(null, Validators.required),
     });
   }
@@ -74,15 +76,16 @@ export class RegisterComponent {
     const url = `${apiConfig.auth.register}`;
     // Trying to connect user
     this.loading = true;
-
+   
     this.authService.register(url,data).subscribe(
       (res) => {
         if (res) {
           this.loading = false;
-            
+          this.notification.record()
           this.router.navigate(['/login']);
         } else {
           this.loading = false;
+          this.notification.error()
           this.error = 'Invalid Login';
         }
       },

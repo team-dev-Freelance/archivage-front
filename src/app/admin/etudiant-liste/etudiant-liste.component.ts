@@ -11,6 +11,7 @@ import { Workbook } from 'exceljs';
 import saveAs from 'file-saver';
 import { FormGroup, FormControl, Validators, FormBuilder } from '@angular/forms';
 import { Observable, Subject } from 'rxjs';
+import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 @Component({
   selector: 'app-etudiant-liste',
@@ -23,8 +24,7 @@ export class EtudiantListeComponent implements OnInit {
   public listeEtudiant: any;
   public listeEtudiantOfParcours: any;
   public listeDepartements: any;
-  public listeOptions: any;
-  public listeNiveaux: any;
+  public listeParcours: any;
   public listeAnnees: any;
   public parcoursDept: any;
   public parcoursNivAndOpt: any;
@@ -45,8 +45,7 @@ form!: FormGroup
 onForm() {
   this.form = new FormGroup({
     departement: new FormControl('', [Validators.required]),
-    option: new FormControl('', [Validators.required]),
-    niveau: new FormControl('', [Validators.required]),
+    parcours: new FormControl('', [Validators.required]),
     annee: new FormControl('', [Validators.required])
   })
 }
@@ -69,33 +68,7 @@ getAllDepartments() {
   );
 }
 
-getAllOptions() {
-  this.listeOptions = [];
-  const url = `${apiConfig.admin.option.getAll}`;
-  this.AdminService.getResources(url).subscribe(
-    (data) => {
-      this.listeOptions = data.body;
-      console.log(this.listeOptions);
-    },
-    (err) => {
-      console.log('erreur', err.error.message);
-    }
-  );
-}
 
-getAllNiveaux() {
-  this.listeNiveaux = [];
-  const url = `${apiConfig.admin.niveau.getAll}`;
-  this.AdminService.getResources(url).subscribe(
-    (data) => {
-      this.listeNiveaux = data.body;
-      console.log(this.listeOptions);
-    },
-    (err) => {
-      console.log('erreur', err.error.message);
-    }
-  );
-}
 
 getAllAnnee() {
   this.listeAnnees = [];
@@ -111,21 +84,33 @@ getAllAnnee() {
   );
 }
 
-getParcoursDept() {
-  this.parcoursDept = [];
-  const formValue = this.form.controls;
-  const url = `${apiConfig.admin.parcours.getAllByDept}`;
+ // Gerer l'etat du champs departement
+ onDepartementChange(): void {
+  const selectedDepartementValue = this.form.controls['departement'].value;
+  const selectedDepartementCode = selectedDepartementValue !== null ? selectedDepartementValue : '';
+
+  // Appeler vos fonctions pour mettre à jour la liste des parcours et cours en fonction du département sélectionné
+  this.getAllParcoursDept(selectedDepartementCode);
+}
+
+getAllParcoursDept(departementCode: string) {
+  this.listeParcours = [];
+  // const url = apiConfig.admin.parcours.getAllByDept(departementCode);
+  const url = apiConfig.admin.parcours.getParcoursByDept+departementCode;
+  console.log(url);
   
-  this.AdminService.getResource(url, formValue['departement'].value).subscribe(
+  // Utilisez directement le départementCode dans l'URL généré
+  this.AdminService.getResources(url).subscribe(
     (data) => {
-      this.parcoursDept = data.body;
-      console.log(this.listeAnnees);
+      this.listeParcours = data.body;
+      console.log(this.listeParcours);
     },
     (err) => {
       console.log('erreur', err.error.message);
     }
   );
 }
+
 
 getParcoursByNivAndOpt(): void {
   const formValue = this.form.controls;
@@ -159,38 +144,32 @@ submit() {
   if (this.form.valid) {
     this.submitted = true;
     this.listeEtudiantOfParcours = [];
+     
+    const formValue = this.form.controls;
+  
+   
+   
+    const parcours: string = formValue['parcours'].value  || '';
+    const annee: number = formValue['annee'].value ? +formValue['annee'].value : 0;
+    console.log(parcours, annee);
 
-    // Appel de la fonction parcours et souscription à l'observable
-    this.getParcoursByNivAndOpt();
+    const url = apiConfig.admin.etudiant.getAllByCoursAndAnnee(
+      annee,
+      parcours
+    );
 
-    // Attendez un court instant pour vous assurer que l'émission a eu lieu
-    setTimeout(() => {
-      // Utilisation de l'observable
-      this.getParcoursObservable().subscribe(
-        (parcoursData) => {
-          const formValue = this.form.controls;
-          // console.log("parcours :", parcoursData.body.id);
-          const parcour = parcoursData.body.label || '';
-          console.log(parcour, " = labelParcours");
-          const annee: number = formValue['annee'].value ? +formValue['annee'].value : 0;
-          const url = apiConfig.admin.etudiant.getAllByCoursAndAnnee(
-            annee,
-            parcour
-          );
-          console.log(url);
-          
-          this.AdminService.getResourceMany(url, {}).subscribe(
-            (data) => {
-              this.listeEtudiantOfParcours = data.body;
-              console.log(this.listeEtudiantOfParcours);
-            },
-            (err) => {
-              console.log('Erreur lors de la récupération des étudiants :', err.error.message);
-            }
-          );
-        }
-      );
-    }, 1); // Ajoutez un délai pour vous assurer que l'émission a eu lieu
+    console.log(url);
+    
+    this.AdminService.getResources(url).subscribe(
+      (data) => {
+        this.listeEtudiantOfParcours = data.body;
+        console.log(this.listeEtudiantOfParcours);
+      },
+      (err) => {
+        console.log('Erreur lors de la récupération des étudiants :', err.error.message);
+      }
+    );
+
   }
 }  // end region
 
@@ -200,69 +179,34 @@ submit() {
     this.onForm();
     //List
     this.getAllDepartments();
-    this.getAllOptions();
-    this.getAllNiveaux();
     this.getAllAnnee();
 
-    // List of student
+     // Observer les changements dans le contrôle de département
+     this.form.controls['departement'].valueChanges
+     .pipe(
+       takeUntil(this.unsubscribe$),  // Détruire l'abonnement lorsque le composant est détruit
+       debounceTime(300),  // Délai de débordement pour éviter des appels excessifs
+       distinctUntilChanged()  // Observer uniquement les changements distincts
+     )
+     .subscribe((selectedDepartementValue) => {
+       const selectedDepartementCode = selectedDepartementValue !== null ? selectedDepartementValue : '';
+ 
+       // Appeler vos fonctions pour mettre à jour la liste des parcours sélectionné
+       this.getAllParcoursDept(selectedDepartementCode);
+     });
+
   }
+
+   // Detruit les observables
+   private unsubscribe$ = new Subject<void>();
+
+   ngOnDestroy(): void {
+     this.unsubscribe$.next();
+     this.unsubscribe$.complete();
+   }
 
   
 //================== region exportation =================================
-  public fileName = 'ExcelSheet.xlsx';
-  
- // Export to Excel
-  exportexcel() {
-    // Create a new workbook
-    const workbook = new Workbook();
-
-    // Add a worksheet to the workbook
-    const worksheet = workbook.addWorksheet('Students List');
-
-    // Get the header table element by ID
-    let dataHeader = document.getElementById('data-header');
-    if (dataHeader) {
-      // Add rows from the header table
-      const wsHeader: XLSX.WorkSheet = XLSX.utils.table_to_sheet(dataHeader);
-      const headerArray: any[][] = XLSX.utils.sheet_to_json(wsHeader, { header: 1 });
-      headerArray.forEach(row => {
-        worksheet.addRow(row);
-      });
-    }
-
-    // Get the body table element by ID
-    let dataBody = document.getElementById('table-data');
-
-    // Check if body is null
-    if (!dataBody) {
-      console.error('Body element is null.');
-      return;
-    }
-
-    // Capture the image using html2canvas
-    html2canvas(dataBody as any).then((canvas) => {
-      const imgData = canvas.toDataURL('image/jpeg');
-
-      // Add the image to the worksheet
-      workbook.addImage({
-        base64: imgData,
-        extension: 'jpeg',
-      });
-
-      // Add rows from the body table
-      const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(dataBody);
-      const dataArray: any[][] = XLSX.utils.sheet_to_json(ws, { header: 1 });
-      dataArray.forEach(row => {
-        worksheet.addRow(row);
-      });
-
-      // Save to file
-      workbook.xlsx.writeBuffer().then((buffer) => {
-        const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
-        saveAs(blob, this.fileName);
-      });
-    });
-  }
 
   public captureScreen() {
     let dataToExport = document.getElementById('contentToConvert');
@@ -291,7 +235,6 @@ submit() {
     });
   }
 
-  
   // end region
 
 }

@@ -1,3 +1,4 @@
+
 import { environment } from '../../../environments/environment';
 if (typeof window !== 'undefined') {
   // Votre code qui utilise window.location ici
@@ -120,7 +121,7 @@ export const api = {
       delete: 'admin/deleteEvaluation/'
     },
     fichier: {
-      create: 'user/fichier/add/',//{id},
+      create: 'user/fichier/add',//{id},
       getFileListByUser: 'user/fichier/boite/',//{id}',
       deleteFile: 'user/fichier/deleteOneFile/', // +id
       deleteBoite: 'user/fichier//deleteBoiteUser/', // +id
@@ -133,19 +134,22 @@ export const api = {
     },
     jury:{
       create: 'admin/jury/add',
-      getAll: 'admin/jury/findAll/',
+      getAll: 'admin/jury/findAll',
       getOne: 'admin/jury/findById/',// id
       delete: 'admin/jury/delete/',
+      
       update: 'admin/jury/update/'
     },
     memoire:{
       
       create: 'admin/memoire/add',
-      getAll: 'admin/memoire/findAll/',
+     
+      getAll: 'admin/memoire/findAll',
       getOne: 'admin/memoire/findById/',// id
       findByKeyworld: 'admin/memoire/findByKeyworld/',
       findByOption: 'admin/memoire/findByOption/',
       findByEtudiant: 'admin/memoire/findByEtudiant/',
+      getAllByCoursAndAnnee: ( label: string, anneeAca: number) => `admin/memoire/findByParcours?label=${label}&anneeAca=${anneeAca}`,
       findByParcours: 'admin/memoire/findByParcours/',
       findByDepartement: 'admin/memoire/findByDepartement/',
       delete: 'admin/memoire/delete/',
@@ -179,6 +183,7 @@ export const api = {
       create: 'admin/parcours/addParcours',
       getAll: 'admin/parcours/findAllParcours',
       getOne: 'admin/parcours/findParcoursById/',
+      getParcoursByDept: 'admin/parcours/findParcoursByDepart?code=',
       // region abdel
       getAllByDept: (code: string) => `admin/parcours/findParcoursByDepart?code=${code}`,
       getAllByNivAndOpt: (niveau: number, code: string) => `admin/parcours/findParcoursByNiveauAndOption/niveau/${niveau}/option?code=${code}`,
@@ -199,24 +204,15 @@ export const api = {
       update: 'admin/updateTypeCours/',
       delete: 'admin/deleteTypeCours/'
     },
-    notes: {
-      // region pv
-      getPVCours: (session: number, annee: number, code : string, label:string) => `findPVCours/session/${session}/annee/${annee}/cours?code=${code}&label=${label}`,
-      getPVCoursSansEE: ( annee: number, code : string, label:string) => `findPVCours/annee/${annee}/cours?code=${code}&label=${label}`,
-      getPVModule: (annee: number, module : string, label:string) => `findPVModule/annee/${annee}/module?code=${module}&label=${label}`,
-      getPVSemestre: (annee: number, cycle:number, label:string) => `findPVSemestriel/anneeAca/${annee}/cycle/${cycle}/parcours?label=${label}`,
-      getPVAnnuel: ( annee: number, label:string) => `findPVAnnuel/anneeAca/${annee}/parcours?label=${label}`,
-      getPVGrandJury: (cycle: number, code : string) => `findPVGrandJury/cycle/${cycle}/option?code=${code}`,
-      // region liste notes
-      getListNotesUE: (annee: number, codeEva: number, codeUE:string, label: string) => `findListeNoteEtudiantFromParcours/annee/${annee}/evaluation/${codeEva}/codeUE?code=${codeUE}&label=${label}`,
-      getListNotesEC: (annee: number, codeEva: number, codeEC:string, label: string) => `findListeNoteEtudiantFromParcours/annee/${annee}/evaluation/${codeEva}/codeEC?code=${codeEC}&label=${label}`,
-      // region post notes
-      cours: 'addNoteCours',
-      module: 'addNoteModule',
-      examen: 'addNoteExamen/anonymat/',
-      update: 'updateNote/',
-    
+    user: {
+      create: '',
+      getOne: 'admin/user/user/findByEmail/',
+      getOneId: 'admin/user/user/findById/',
+      getAll: 'admin/user/user/findAll',
+      update: '',
+      delete: ''
     },
+   
     statistique: {
       getGlobalStat:'admin/findGloalStat',
       countAllYears: 'admin/findAllActifAnneeAca',

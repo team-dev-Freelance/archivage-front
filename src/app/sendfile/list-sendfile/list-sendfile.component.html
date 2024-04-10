@@ -1,7 +1,7 @@
 <div class="container-xl p-5">
     <div class="row justify-content-between align-items-center mb-5">
         <div class="col flex-shrink-0 mb-5 mb-md-0">
-            <h1 class="display-4 mb-0">Historique d'envoi des fichiers</h1>
+            <h1 class="display-4 mb-0">Boite de reception des fichiers</h1>
             <div class="text-muted">Recap. </div>
         </div>
 
@@ -34,25 +34,36 @@
                         <tr>
                             <th>N°</th>
                             <th>Objet</th>
-                            <th>Role</th>
-                            <th>Destinataire </th>
-                            <th>Statut </th>
-                            <th>Action(s)</th>
+                            <th>Expediteur </th>
+                            <th>Pieces-jointes</th>
+                            <th>Date </th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr *ngFor="let item of allParcourss; let i =  index">
+                        <tr *ngFor="let item of allBoiteFichier; let i = index;">
+                            <td ><input type="checkbox" /></td>
+                            <td ><a>{{item.nom}}</a></td>
+                            <td ><a>{{item.emailExpediteur}}</a></td>
+                            <td >
+                                <a [href]="item.urlsJointPieces" >
+                                    <button class="btn btn-success"> 
+                                        <i class="fa fa-download"></i>
+                                    </button> 
+                                </a>
+                            </td>
+                            <td class="time">{{item.date| date: 'yyyy-MM-dd'}} à{{item.date| date: ' HH:mm:ss'}}</td>
                            
-                            <td>{{i + 1}}</td>
-                            <td>{{item.label}}</td>
-                            <td>{{item.niveau.valeur}}</td>
-                            <td>{{item.option.code}}</td>
-                            <td>{{item.option.code}}</td>
-                            <td>Actions</td>
-                            <!-- <td class="text-success">   
-                                <button class="btn btn-danger" (click)="remove(item.id)"> <i class="fa fa-trash"></i></button>
-                            </td> -->
-                        </tr>
+                            <td class="action">
+                                <a (click)="remove(item.id)" >
+                                    <button class="btn btn-danger">
+                                        <i  class="fa fa-trash"  style="color: white;"></i>
+                                    </button>
+                                  
+                                </a>
+                            </td>
+                            
+                        </tr> 
                     </tbody>
                 </table>
     

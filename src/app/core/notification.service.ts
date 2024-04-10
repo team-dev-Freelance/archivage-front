@@ -14,6 +14,14 @@ export class NotificationService {
       timeOut: 3000,
     });
   }
+
+  login() {
+    this.toastr.success("Authentification effectué avec succès ", 'Success', {
+      positionClass: 'toast-top-right',
+      timeOut: 3000,
+    });
+  }
+  
   update() {
     this.toastr.success("Mise à jour effectuée ", 'Success');
   }

@@ -40,7 +40,7 @@ export class DashboardComponent  implements AfterViewInit, OnInit {
     this.getCountUE();
     this.getCountParcours();
     this.getCountDepartement();
-    this.getTauxReussite();
+    // this.getTauxReussite();
    
   }
 

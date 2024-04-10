@@ -3,6 +3,7 @@ import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms'
 import { Router, ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { log } from 'console';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'app-auth',
@@ -21,6 +22,7 @@ export class AuthComponent {
     private formBuilder: FormBuilder,
     private route: ActivatedRoute,
     private authService: AuthService,
+    private notification:NotificationService,
   ) {
   }
 
@@ -77,20 +79,24 @@ export class AuthComponent {
           const role = sessionStorage.getItem('role');
 
           if (role === 'ADMIN') {
+            this.notification.login()
             this.router.navigate(['/administrator/dashboard']);
             console.log('yeah');
             
           } else if (role === 'MANAGER') {
+            
             this.router.navigate(['/aci']);
           } else {
             this.router.navigate(['/login']);
           }
         } else {
+          this.notification.error()
           this.loading = false;
           this.error = 'Invalid Login';
         }
       },
       (error) => {
+        this.notification.error()
         this.error = error;
         this.submitted = false;
         console.log('error', error);

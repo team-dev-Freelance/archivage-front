@@ -30,8 +30,8 @@ import { EtudiantListeComponent } from './etudiant-liste/etudiant-liste.componen
 
 // Add Module DataTable 
 import { DataTablesModule } from 'angular-datatables';
-
-import { NotesListeComponent } from './notes-liste/notes-liste.component';
+import { JuryFormComponent } from './jury-form/jury-form.component';
+import { JuryComponent } from './jury/jury.component';
 
 @NgModule({
   declarations: [
@@ -40,7 +40,6 @@ import { NotesListeComponent } from './notes-liste/notes-liste.component';
     AnneeAcademiqueComponent,
     DepartementFormComponent,
     AnneeAcademiqueFormComponent,
-  
     FiliereComponent,
     FiliereFormComponent,
     CycleComponent,
@@ -56,8 +55,8 @@ import { NotesListeComponent } from './notes-liste/notes-liste.component';
     FiliereFormMultipleComponent,
    
     EtudiantListeComponent,
- 
-    NotesListeComponent,
+       JuryFormComponent,
+       JuryComponent,
   ],
   imports: [
     CommonModule,

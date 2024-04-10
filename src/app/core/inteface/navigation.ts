@@ -76,24 +76,12 @@ export const navAdmin: Menu[] = [
            
         ]
     },
+   
     {
-        label: "Envoi-des-fichiers",
-        icon: "cloud_upload",
-        expandable: true,
-        subMenu: [
-            {
-                label: "transfert-fichier",
-                icon: "cloud_upload",
-                routerlink: "sendfile/newsendfile/"
-            },
-        
-            {
-                label: "historique des envois",
-                icon: "history",
-                routerlink: "sendfile/listsendfiles/"
-            },
-
-        ]
+        label: "Gestion-des-jurys",
+        icon: "supervisor_account",
+        routerlink: "/administrator/jury/",
+        expandable: false,
     },
    
     {
@@ -111,6 +99,25 @@ export const navAdmin: Menu[] = [
                 label: "Liste-des-memoires",
                 icon: "list_alt",
                 routerlink: "notes/listenote/"
+            },
+
+        ]
+    },
+    {
+        label: "Envoi-des-fichiers",
+        icon: "cloud_upload",
+        expandable: true,
+        subMenu: [
+            {
+                label: "transfert-fichier",
+                icon: "cloud_upload",
+                routerlink: "sendfile/newsendfile/"
+            },
+        
+            {
+                label: "historique des envois",
+                icon: "history",
+                routerlink: "sendfile/listsendfiles/"
             },
 
         ]

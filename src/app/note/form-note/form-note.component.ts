@@ -3,9 +3,10 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ServicesService } from '../../core/services/services.service';
 import { api as apiConfig } from '../../core/configs/constants';
 import { Etudiant } from '../../core/models/etudiant';
-import { Observable, Subject } from 'rxjs';
-import { takeUntil, debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { Observable, Subject, forkJoin, of } from 'rxjs';
+import { takeUntil, debounceTime, distinctUntilChanged, map, catchError } from 'rxjs/operators';
 import { NotificationService } from '../../core/notification.service';
+import { log } from 'console';
 
 
 @Component({
@@ -13,10 +14,15 @@ import { NotificationService } from '../../core/notification.service';
   templateUrl: './form-note.component.html',
   styleUrl: './form-note.component.scss'
 })
+
 export class FormNoteComponent implements OnInit{
-onSelectFile($event: Event) {
-throw new Error('Method not implemented.');
-}
+fileError: any;
+submitted = false;
+ 
+
+  onSelectFile($event: Event) {
+  throw new Error('Method not implemented.');
+  }
 
   public listeEtudiantOfParcours: any;
   public evaluations : any;
@@ -26,14 +32,18 @@ throw new Error('Method not implemented.');
   public parcoursNivAndOpt: any;
   public listeDepartements: any;
   // Single List
-  public singleCours: any;
-  public sessionAca:any
-  public singleParcours:any;
+  public listeJury: any;
+  public jury:any;
   public anneeAca:any;
   public etudiant!: any;
+  public memoireJson:any = []
+  public selectedFile!: File ; 
+  formData!: FormData;
 
-
-  constructor(private AdminService:ServicesService, private notification:NotificationService) { }
+  constructor(
+     private AdminService:ServicesService,
+     private notification:NotificationService,
+     ) { }
 
   // ======================region search student by filter ================
 
@@ -46,15 +56,20 @@ throw new Error('Method not implemented.');
   form!: FormGroup;
   onForm() {
     this.form = new FormGroup({
+      annee: new FormControl('', [Validators.required]),
       departement: new FormControl('', [Validators.required]),
       parcours: new FormControl('', [Validators.required]),
-      cours: new FormControl('', [Validators.required]),
-      annee: new FormControl('', [Validators.required]),
+      theme: new FormControl('', [Validators.required]),
+      keyworlds: new FormControl('', [Validators.required]),
+     
       etudiant: new FormControl('', [Validators.required]),
-      type: new FormControl('', [Validators.required]),
-      valeur: new FormControl('', [Validators.required]),
-      keyword: new FormControl('', [Validators.required]),
-    })
+      pjury: new FormControl('', [Validators.required]),
+      examinateur: new FormControl('', [Validators.required]),
+      rapporteur: new FormControl('', [Validators.required]),
+      urlfile: new FormControl('', [Validators.required]),
+    });
+
+    this.formData = new FormData();
   }
 
   // departement
@@ -71,6 +86,21 @@ getAllDepartments() {
     }
   );
 }
+
+ // departement
+ getAllJury() {
+  this.listeJury = [];
+  const url = `${apiConfig.admin.jury.getAll}`;
+  this.AdminService.getResources(url).subscribe(
+    (data) => {
+      this.listeJury = data.body;
+      console.log(this.listeJury);
+    },
+    (err) => {
+      console.log('erreur', err.error.message);
+    }
+  );
+}
   
  // Gerer l'etat du champs departement
  onDepartementChange(): void {
@@ -79,7 +109,6 @@ getAllDepartments() {
 
   // Calls functions to updates liste des parcours et cours en fonction du département sélectionné
   this.getAllParcoursDept(selectedDepartementCode);
-  this.getAllCoursDept(selectedDepartementCode);
 }
 
 
@@ -95,7 +124,7 @@ getAllEtudiantByParcours(parcoursLabel: string) {
   );
   console.log(url);
 
-  this.AdminService.getResourceMany(url, {}).subscribe(
+  this.AdminService.getResources(url).subscribe(
     (data) => {
       this.etudiant = data.body;
       console.log(this.etudiant);
@@ -110,9 +139,10 @@ getAllEtudiantByParcours(parcoursLabel: string) {
   getAllParcoursDept(departementCode: string) {
     this.listeParcours = [];
     const url = apiConfig.admin.parcours.getAllByDept(departementCode);
-
+    console.log(url);
+    
     // Utilisez directement le départementCode dans l'URL généré
-    this.AdminService.getResourceMany(url, {}).subscribe(
+    this.AdminService.getResources(url).subscribe(
       (data) => {
         this.listeParcours = data.body;
         console.log(this.listeParcours);
@@ -124,32 +154,8 @@ getAllEtudiantByParcours(parcoursLabel: string) {
   }
 
   
-  getAllCoursDept(departementCode: string) {
-    this.listeCoursDept = [];
-    const url = apiConfig.admin.cours.getAllByDepartCode(departementCode);
-    // use it here
-    this.AdminService.getResourceMany(url, {}).subscribe(
-      (data) => {
-        this.listeCoursDept = data.body;
-        console.log(this.listeCoursDept);
-      },
-      (err) => {
-        console.log('erreur', err.error.message);
-      }
-    );
-  }
-  getAllEvalation() {
-    //this.cours = [];
-    const url = `${apiConfig.admin.evaluation.getAll}`;
-    this.AdminService.getResources(url).subscribe(
-      (data) => {
-        this.evaluations = data.body;
-      },
-      (err) => {
-        console.log('erreur', err.error.message);
-      }
-    );
-  }
+  
+ 
   
   getAllAnnee() {
     this.listeAnnees = [];
@@ -165,6 +171,18 @@ getAllEtudiantByParcours(parcoursLabel: string) {
     );
   }
 
+  getJuryById(id: any): Observable<any> {
+    const url = `${apiConfig.admin.jury.getOne + id}`;
+    return this.AdminService.getResources(url).pipe(
+      map(data => data.body),
+      catchError(error => {
+        console.error('Erreur lors de la récupération du jury', error);
+        return of(null); // Retourne une observable contenant null en cas d'erreur
+      })
+    );
+  }
+  
+
 
   //End Single List
 
@@ -172,8 +190,9 @@ getAllEtudiantByParcours(parcoursLabel: string) {
     
     this.onForm();
     this.getAllAnnee();
+    this.getAllJury();
     this.getAllDepartments();
-    this.getAllEvalation() ;
+
      
     // Observ state of control of département
      this.form.controls['departement'].valueChanges
@@ -186,7 +205,7 @@ getAllEtudiantByParcours(parcoursLabel: string) {
        const selectedDepartementCode = selectedDepartementValue !== null ? selectedDepartementValue : '';
       //Call functions concerned
        this.getAllParcoursDept(selectedDepartementCode);
-       this.getAllCoursDept(selectedDepartementCode);
+      
      });
 
      //Pour parcours
@@ -214,20 +233,96 @@ getAllEtudiantByParcours(parcoursLabel: string) {
      this.unsubscribe$.next();
      this.unsubscribe$.complete();
    }
+
+
+  //  submit() {
+  //   if (this.form.valid) {
+  //     const pjuryId = this.form.value.pjury;
+  //     const examinateurId = this.form.value.examinateur;
+  //     const rapporteurId = this.form.value.rapporteur;
+  
+  //     forkJoin([
+  //       this.getJuryById(pjuryId),
+  //       this.getJuryById(examinateurId),
+  //       this.getJuryById(rapporteurId)
+  //     ]).subscribe(([pjury, examinateur, rapporteur]) => {
+  //       const memoire = {
+  //         theme: this.form.value.theme,
+  //         keyworlds: [this.form.value.keyworlds],
+  //         etudiant: this.findEtudiantByMatricule(this.form.value.etudiant),
+  //         jury: [pjury, examinateur, rapporteur],
+  //         urlFile: this.form.value.urlfile
+  //       };
+  //       console.log(memoire);
+        
+  //       const url = `${apiConfig.admin.memoire.create}`;
+  //       this.AdminService.saveResource(url, memoire).subscribe({
+  //         next: res => {
+  //           this.notification.record();
+  //           this.form.reset();
+  //         },
+  //         error: err => {
+  //           this.notification.error();
+  //         }
+  //       });
+  //     });
+  //   }
+  // }
+
+  public readUploadFile = (e: any) => {
+    if (e.target.files && e.target.files[0]) {
+      this.selectedFile = e.target.files[0]; // Enregistrer le fichier sélectionné dans la variable
+      console.log('Fichier sélectionné :', this.selectedFile);
+
+     
+      // return this.selectedFile;
+    }
+    return null;
+  };
   
 
+  //Upload datas
+   
+  uploadFileData(event: MouseEvent) {
+    this.submitted = true;
 
-  submit() {
-    if (this.form.valid) {
-      var notes: any = {
-        etudiant: this.findEtudiantByMatricule(this.form.value.etudiant),
-        valeur: this.form.value.valeur,
-        anneeAcademique: this.findTypeAnneeById(Number(this.form.value.annee)),
-        cours: this.findcoursById(this.form.value.cours),
-        evaluation: this.findTypeEvaluationById( this.form.value.type)
-      }
-      const url = `${apiConfig.admin.notes.cours}`;
-    this.AdminService.saveResource(url, notes).subscribe(
+    if (!this.selectedFile) {
+      console.error('No file selected.');
+      return;
+    }
+    
+    var jury = [
+      this.form.value.pjury,
+      this.form.value.examinateur,
+      this.form.value.rapporteur
+    ]
+    // // Convertir la liste de jury en JSON
+    const juryJson = JSON.stringify(jury);
+
+    // console.log("juryListe = ", juryJson);
+  
+     
+    // // Ajouter les autres données du formulaire à formData
+
+    this.formData.append('theme', this.form.value.theme);
+    this.formData.append('etudiantId', this.form.value.etudiant);
+    this.formData.append('juryId',  this.form.value.pjury);
+    this.formData.append('juryId',  this.form.value.examinateur);
+    this.formData.append('juryId',   this.form.value.rapporteur);
+    this.formData.append('keyworlds', this.form.value.keyworlds);
+    this.formData.append('file', this.selectedFile);
+
+    // Output formData content
+    this.formData.forEach((value, key) => {
+      console.log(key + ': ' + value);
+    });
+    console.log('FormValue = :', this.form.value);
+    console.log('Data to send:', this.formData);
+
+    const url = `${apiConfig.admin.memoire.create}`;
+    console.log(url);
+    
+    this.AdminService.saveResourceFile(url,  this.formData).subscribe(
       {
         next: res => {
           this.notification.record()
@@ -238,10 +333,12 @@ getAllEtudiantByParcours(parcoursLabel: string) {
 
         }
       }
-    );
+    ); 
 
-    } 
   }
+  
+  
+  
   findTypeAnneeById(arg: Number) {
     return this.listeAnnees.find((item: { numeroDebut: any; })  => arg === item.numeroDebut)
   }
@@ -253,6 +350,10 @@ getAllEtudiantByParcours(parcoursLabel: string) {
   findEtudiantByMatricule(matricule: string) {
     return this.etudiant.find((item: { matricule: string; }) => matricule === item.matricule)
   }
+  findJuryById(id: any) {
+    return this.listeJury.find((item: { id: any; }) => id === item.id)
+  }
+
   findTypeEvaluationById(code: String) {
     return this.evaluations.find((item: { code: String; }) => code === item.code)
   }

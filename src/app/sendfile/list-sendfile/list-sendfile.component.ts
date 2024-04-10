@@ -21,52 +21,60 @@ import { NotificationService } from '../../core/services/notification.service';
 
 export class ListSendfileComponent implements OnInit {
 
-  allParcourss!: Parcours[]
+  allBoiteFichier!:any
   constructor(private notification:NotificationService, private adminService: ServicesService, private router: Router) {
 
   }
 
   ngOnInit(): void {
-    this.getParcourss();
 
-  }
+    const userId = sessionStorage.getItem('userId');
+    const url = `${apiConfig.admin.user.getOneId}`;
+    console.log(url);
+    
+    this.adminService.getResources(url+ userId).subscribe({
+      next: res => {
+        localStorage.setItem('nom',res.body.nom)
+        localStorage.setItem('email',res.body.email)
 
-  getParcourss() {
-    const url = `${apiConfig.admin.parcours.getAll}`;
-    this.adminService.getResources(url).subscribe(
-      (data) => {
-        this.allParcourss = data.body;
-        console.log(this.allParcourss);
-        
       },
-      (err) => {
-        console.log('erreur', err.error.message);
+    });
+
+    this.boiteFichier();
+  }
+
+
+  boiteFichier() {
+    const userId = sessionStorage.getItem('userId');
+    const url = `${apiConfig.admin.fichier.getFileListByUser}`;
+    console.log(url);
+    
+    this.adminService.getResources(url + userId ).subscribe({
+      next: res => {
+        this.allBoiteFichier = res.body;
+        console.log(this.allBoiteFichier);
+      
+      },
+    });
+  }
+
+
+  remove(arg: any) {
+
+    const url = `${apiConfig.admin.fichier.deleteFile}`;
+    this.adminService.deleteResource(url , arg ).subscribe({
+      next: res => {
+       this.notification.record();
+        window.location.reload()
+      },
+      error :err  =>{
+       this.notification.error();
+        // alert("Suppression faites")
+        window.location.reload()
+        
       }
-    );
-  }
-  update(item: Parcours) {
-    const encodedId = encodeURIComponent(item.id + "%" + item.label + "%" + item.niveau.id + "%" + item.option.id);
-    this.router.navigate(['administrator/parcours/update/', encodedId]);
-  }
-
-  remove(arg: Number | undefined) {
-    const url = `${apiConfig.admin.parcours.delete}`;
-    if (arg) {
-      this.adminService.deleteResource(url, arg).subscribe({
-        next: res => {
-          this.notification.remove()
-          this.getParcourss()
-        },
-        error: err => {
-          this.notification.remove()
-          this.getParcourss()
-          //this.toastr.error("Erreur survenir", 'Error');
- 
-        }
-
-      })
+    });
     }
-  }
 
 
 

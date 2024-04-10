@@ -22,21 +22,29 @@ export class ServicesService {
     private router: Router,
   ) { }
 
+
   private getToken() {
-    const accessToken = sessionStorage.getItem('accessToken');
-    return accessToken ? accessToken : "";
+    if (typeof sessionStorage !== 'undefined') {
+      const accessToken = sessionStorage.getItem('accessToken');
+      return accessToken ? accessToken : "";
+    } else {
+      // Handle the scenario where sessionStorage is not available
+      return "";
+    }
   }
 
   // region abdel
   public getResourceMany(url: string, params: any): Observable<any> {
+    const authToken = this.getToken();
     const httpOptions: any = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
+        Authorization: 'BEARER ' + authToken,
       }),
       observe: 'response',
       responseType: 'json',
     };
-
+    
     const urlWithParams = this.buildUrlWithParams(url, params);
 
     return this.http.get<any[]>(urlWithParams, httpOptions);
@@ -64,24 +72,6 @@ export class ServicesService {
     return urlWithParams;
   }
 
-  // public  getPVCours(requestHeader: PVCoursRequest): Observable<any> {
-  //     const url = `${this.host}findPVCours`;
-
-  //     // Les informations sont maintenant ajoutées comme en-têtes HTTP
-  //     const httpOptions = {
-  //       headers: new HttpHeaders({
-  //         'session': requestHeader.session.toString(),
-  //         'code': requestHeader.code.toString(),
-  //         'type': requestHeader.type,
-  //         'anneeAca': requestHeader.anneeAca.toString(),
-  //         'parcours': requestHeader.parcours.toString(),
-  //       }),
-  //     };
-
-  //     return this.http.get<any[]>(url, httpOptions);
-  // }
-
-  // end region
 
   public getResource(url: string, id: any): Observable<any> {
     const authToken = this.getToken();
@@ -111,6 +101,23 @@ export class ServicesService {
     };
     return this.http.post<any[]>(this.host + url, data, httpOptions);
   }
+
+  
+  public saveResourceFile(url: string, data: any): Observable<any> {
+     const authToken = this.getToken();
+    // console.log(authToken);
+    
+    const httpOptions: any = {
+      headers: new HttpHeaders({
+        // 'Content-Type': 'multipart/form-data',
+         Authorization: 'Bearer ' + authToken,
+      }),
+      observe: 'response',
+      responseType: 'json',
+    };
+    return this.http.post<any[]>(this.host + url, data,  httpOptions);
+  }
+
 
   public getResources(url: string): Observable<any> {
     const authToken = this.getToken();
@@ -154,21 +161,15 @@ export class ServicesService {
     return this.http.delete(this.host + url + id, httpOptions);
   }
 
+  
   public readUploadFile = (e: any) => {
     e.preventDefault();
     let json: any = [];
     if (e.target.files) {
       const reader = new FileReader();
       reader.readAsArrayBuffer(e.target.files[0]);
-      reader.onload = (e) => {
-        const data = e?.target?.result;
-        const workbook = read(data, { type: "array" });
-        const sheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[sheetName];
-        json = utils.sheet_to_json(worksheet);
-        console.log(json);
-        //this.json = json;
-      };
+      console.log(e.target.files[0]);
+      
     }
 
     console.log('hors', json);
@@ -176,6 +177,9 @@ export class ServicesService {
     console.log(json);
     //this.json = json;
   };
+
+  
 }
+
 
 

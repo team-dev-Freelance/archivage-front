@@ -10,6 +10,9 @@ export class NotificationService {
   record(message :string ="Enregistrement effectué ", title: string = 'Success'): void {
     this.toastr.success(message, title);
   }
+  login(message :string ="Authentification effectué avec succès ", title: string = 'Success'): void {
+    this.toastr.success(message, title);
+  }
   update(message : string ="Mise à jour effectuée ", title: string = 'Success'): void {
     this.toastr.success(message, title);
   }

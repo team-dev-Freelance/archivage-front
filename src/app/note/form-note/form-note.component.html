@@ -4,14 +4,9 @@
             <div class="col-md-10">
                 <h1 class="text-white py-3 mb-0 display-6 text-center fw-light">
                     <i class="material-icons">library_add</i>
-                    Archiver un mémoire</h1>
+                    Enregistrer un mémoire</h1>
             </div>
-            <!-- <div class="col-md-6 d-flex justify-content-end align-items-center">
-                <hr class="my-0 mx-3" style="height: 40px; border-width: 2px;">
-                <button class="btn btn-info text-white" type="button" routerLink="/notes/module">
-                    <i class="material-icons">library_add</i> Ajout multiple ?
-                </button>
-            </div> -->
+         
         </div>
     </div>
 </header>
@@ -23,7 +18,7 @@
         <div class="card-body p-5">
 
             <!-- Login submission form-->
-            <form class="mb-5" [formGroup]="form" (ngSubmit)="submit()">
+            <form class="mb-5" [formGroup]="form" >
                 
                     <div class="mb-4">
                         <div class="form-group">
@@ -44,7 +39,7 @@
                     <div class="mb-4">
                         <div class="form-group">
                             <label for="type">Département </label>
-                            <select class="form-control"  name="departement" formControlName="departement">
+                            <select class="form-control"   formControlName="departement">
                                 <option value="">Sélectionner</option>
                                 <option *ngFor="let departement of listeDepartements" [value]="departement.code">{{ departement.code }}</option>
                             </select>
@@ -56,7 +51,7 @@
                     <div class="mb-4">
                         <div class="form-group">
                             <label for="type">Parcours </label>
-                            <select class="form-control" name="parcours" formControlName="parcours">
+                            <select class="form-control"  formControlName="parcours">
                                 <option value="">Sélectionner</option>
                                 <option *ngFor="let parcour of listeParcours" [value]="parcour.label">{{
                                     parcour.label }}</option>
@@ -71,7 +66,8 @@
                     <div class="mb-4">
                         <div class="form-group">
                             <label >Thème</label>
-                            <input type="text" placeholder="votre theme"  class="form-control"  formControlName="theme">
+                            <textarea name="" id="" cols="30" rows="2"  formControlName="theme" placeholder="votre theme" class="form-control"></textarea>
+                    
                             <div *ngIf="form.get('theme')?.invalid && form.get('theme')?.touched">
                                 <small class="text-danger" *ngIf="form.get('theme')?.hasError('required')"> {{
                                     errorMessages.required }} </small>
@@ -84,9 +80,10 @@
                     <div class="mb-4">
                         <div class="form-group">
                             <label >Mots-clés</label>
-                            <input type="text"  class="form-control" placeholder="{mot1; mot2; ...}"  formControlName="keyword">
-                            <div *ngIf="form.get('keyword')?.invalid && form.get('keyword')?.touched">
-                                <small class="text-danger" *ngIf="form.get('keyword')?.hasError('required')"> {{
+                            <textarea name="" id="" cols="30" rows="2"  formControlName="keyworlds" placeholder="Ex:mot1; mot2;.." class="form-control"></textarea>
+
+                            <div *ngIf="form.get('keyworlds')?.invalid && form.get('keyworlds')?.touched">
+                                <small class="text-danger" *ngIf="form.get('keyworlds')?.hasError('required')"> {{
                                     errorMessages.required }} </small>
                             </div>
                         </div>
@@ -98,7 +95,7 @@
                             <label for="type">Présenté par :</label>
                             <select  class="form-control" formControlName="etudiant">
                                 <option value="">Sélectionner l'étudiant</option>
-                                <option *ngFor="let item of etudiant" [value]="item.matricule">{{item.matricule + "  "+item.nom}} </option>
+                                <option *ngFor="let item of etudiant" [value]="item.id">{{item.matricule + "  "+item.nom}} </option>
                             </select>
                         </div>
                         <div *ngIf="form.get('etudiant')?.invalid && form.get('etudiant')?.touched">
@@ -109,9 +106,23 @@
                     <div class="mb-4">
                         <div class="form-group">
                             <label >Sous la supervision de:</label>
-                            <input type="text"  class="form-control" placeholder="President du jury" formControlName="pjury"><br>
-                            <input type="text"  class="form-control" placeholder="Examinateur"   formControlName="examinateur"><br>
-                            <input type="text"  class="form-control" placeholder="Rapporteur"   formControlName="rapporteur">
+                            <select  class="form-control" formControlName="pjury">
+                                <option value="">President du jury*</option>
+                                <option *ngFor="let jury of listeJury" [value]="jury.id"> {{ jury.grade + ". " +jury.name + " ( "+jury.statut + " ) "}} </option>
+                            </select>
+                            <br>
+                           <select  class="form-control" formControlName="examinateur">
+                                <option value="">Examinateur*</option>
+                                <option *ngFor="let jury of listeJury" [value]="jury.id"> {{ jury.grade + ". " +jury.name + " ( "+jury.statut + " ) "}} </option>
+
+                            </select>
+                           <br>
+                           <select  class="form-control" formControlName="rapporteur">
+                                <option value="">Rapporteur*</option>
+                                <option *ngFor="let jury of listeJury" [value]="jury.id"> {{ jury.grade + ". " +jury.name + " ( "+jury.statut + " ) "}} </option>
+
+                          </select>
+                          
                             <div *ngIf="form.get('pjury')?.invalid && form.get('pjury')?.touched">
                                 <small class="text-danger" *ngIf="form.get('pjury')?.hasError('required')"> {{
                                     errorMessages.required }} </small>
@@ -121,16 +132,17 @@
                         
                     </div>
 
-                    <!-- Fichier numerique du memoire pour zipper -->
+                   <!-- Fichier numérique du mémoire -->
                     <div class="mb-4">
                         <div class="form-group">
-                            <label>Fichier numérique  </label>
-                            <input type="file" class="form-control" (change)="onSelectFile($event)">
+                            <label>Fichier numérique du mémoire</label>
+                            <input type="file" (change)="readUploadFile($event)" class="form-control"  >
                         </div>
+                        <!-- <small *ngIf="fileError" class="text-danger">Aucun fichier sélectionné</small> -->
                     </div>
                
                 <div class="form-group d-flex align-items-center justify-content-between mt-4 mb-0">
-                    <button class="btn btn-info text-white" type='submit'>Archiver</button>
+                    <button class="btn btn-info text-white" type='submit' (click)="uploadFileData($event)" >Archiver</button>
                 </div>
             </form>
             <!-- Auth card message-->
